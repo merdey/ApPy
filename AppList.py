@@ -35,15 +35,18 @@ class JobApplication:
         self.interest = interest
         self.url = url
         self.category = category
-        self.date = datetime.datetime.now()
-        self.date = [self.date.month, self.date.day, self.date.year]
+        today = datetime.datetime.now()
+        self.date = [today.month, today.day, today.year]
         self.notes = notes
 
 
     def changeStatus(self, new_status):
-        assert status in valid_status_options, 'Invalid Status'
+        assert new_status in valid_status_options, 'Invalid Status: ' + new_status
         
         self.status = new_status
+        #update date
+        today = datetime.datetime.now()
+        self.date = [today.month, today.day, today.year]
 
     def __str__(self):
         s = 'Company Name: {0}\nStatus: {1}\nDate: {2}/{3}/{4}\nInterest: {5}\nURL: {6}\n{7}\n'.format(self.company_name, self.status, self.date[0], self.date[1], self.date[2], self.interest, self.url, self.category)
@@ -67,6 +70,13 @@ class ApplicationList:
         #removes app based on app.company_name, may add ability to remove based on more factors
         self.apps = [app for app in self.apps if app.company_name != company_name]
 
+    def changeAppStatus(self, company_name, new_status):
+        for app in self.apps:
+            if app.company_name == company_name:
+                app.changeStatus(new_status)
+                return True
+        return False
+
     def search(self, key, value):
         if key == 'name':
             key = 'company_name'
@@ -84,6 +94,7 @@ class ApplicationList:
         self.apps.sort(key=attrgetter(sort_key))
         if reverse:
             self.apps = self.apps[::-1]
+            
     def save(self, filename):
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
@@ -102,6 +113,8 @@ while(True):
     print('[0] print out applications')
     print('[1] sort')
     print('[2] filter')
+    print('[3] change status')
+    print('[4] quit')
     user_input = int(input())
     if user_input == 0:
         print(str(appList))
@@ -115,5 +128,16 @@ while(True):
         print('For what value?')
         value = input()
         print(str(appList.search(filter_key, value)))
+    elif user_input == 3:
+        print('Company name whose application status you would like to change?')
+        company_name = input()
+        print('New status?')
+        new_status = input()
+        if appList.changeAppStatus(company_name, new_status):
+            print('Status changed')
+        else:
+            print('Company not found')
+    elif user_input == 4:
+        break
     else:
         print('invalid input')
