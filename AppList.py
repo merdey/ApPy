@@ -41,8 +41,6 @@ class JobApplication:
 
 
     def changeStatus(self, new_status):
-        assert new_status in valid_status_options, 'Invalid Status: ' + new_status
-        
         self.status = new_status
         #update date
         today = datetime.datetime.now()
@@ -94,6 +92,12 @@ class ApplicationList:
         self.apps.sort(key=attrgetter(sort_key))
         if reverse:
             self.apps = self.apps[::-1]
+
+    def hasApp(self, company_name):
+        for app in self.apps:
+            if app.company_name == company_name:
+                return True
+        return False
             
     def save(self, filename):
         with open(filename, 'wb') as f:
@@ -114,7 +118,7 @@ while(True):
     print('[1] sort')
     print('[2] filter')
     print('[3] change status')
-    print('[4] quit')
+    print('[4] save and quit')
     user_input = int(input())
     if user_input == 0:
         print(str(appList))
@@ -131,13 +135,20 @@ while(True):
     elif user_input == 3:
         print('Company name whose application status you would like to change?')
         company_name = input()
+        if not appList.hasApp(company_name):
+            print('Company not found')
+            continue
         print('New status?')
         new_status = input()
+        if new_status not in valid_status_options:
+            print('Invalid status')
+            continue
         if appList.changeAppStatus(company_name, new_status):
             print('Status changed')
         else:
             print('Company not found')
     elif user_input == 4:
+        appList.save('apps.txt')
         break
     else:
         print('invalid input')
