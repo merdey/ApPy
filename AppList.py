@@ -7,12 +7,14 @@ valid_status_options = ['interested',
                         'phone screen',
                         'interview',
                         'offer',
+                        'rejected', #or no listing/looking for upperclassmen
                         ]
 
-#mainly to ensure categories maintain some sense of order (for sorting) and to act as a spell/sanity check when inputting new apps
+#ensures categories maintain some sense of order (as well as making category somewhat useful to sort/filter)
 valid_categories = ['Varied', #alias for "I'm not quite sure"
                     'Web',
                     'iOS',
+                    'Android',
                     'Telecom',
                     'Education',
                     'Data',
@@ -38,7 +40,6 @@ class JobApplication:
         today = datetime.datetime.now()
         self.date = [today.month, today.day, today.year]
         self.notes = notes
-
 
     def changeStatus(self, new_status):
         self.status = new_status
@@ -75,6 +76,13 @@ class ApplicationList:
                 return True
         return False
 
+    def addNotes(self, company_name, new_notes):
+        for app in self.apps:
+            if app.company_name == company_name:
+                app.notes += '\n' + new_notes
+                return True
+        return False
+
     def search(self, key, value):
         if key == 'name':
             key = 'company_name'
@@ -103,6 +111,18 @@ class ApplicationList:
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
+    def printStats(self):
+        stats = {}
+        for app in self.apps:
+            status = app.status
+            if status in stats:
+                stats[status] += 1
+            else:
+                stats[status] = 1
+        for stat in stats:
+            print(stat + ": " + str(stats[stat]))
+                  
+
     def __str__(self):
         #string rep when using as CLI
         s = ''
@@ -118,37 +138,52 @@ while(True):
     print('[1] sort')
     print('[2] filter')
     print('[3] change status')
-    print('[4] save and quit')
-    user_input = int(input())
-    if user_input == 0:
+    print('[4] new application')
+    print('[5] save')
+    print('[6] quit')
+    print('[7] print stats')
+    user_input = input('Choose an option: ')
+    if user_input == '0':
         print(str(appList))
-    elif user_input == 1:
-        print('What attribute would you like to sort by?')
-        sort_key = input()
+    elif user_input == '1':
+        sort_key = input('What attribute would you like to sort by: ')
         appList.sort(sort_key)
-    elif user_input == 2:
-        print('What attribute would you like to filter by?')
-        filter_key = input()
-        print('For what value?')
-        value = input()
+    elif user_input == '2':
+        filter_key = input('What attribute would you like to filter by: ')
+        value = input('For what value: ')
         print(str(appList.search(filter_key, value)))
-    elif user_input == 3:
-        print('Company name whose application status you would like to change?')
-        company_name = input()
+    elif user_input == '3':
+        company_name = input('Company name whose application status you would like to change: ')
         if not appList.hasApp(company_name):
             print('Company not found')
             continue
-        print('New status?')
-        new_status = input()
+        new_status = input('New status: ')
+        new_notes = input('Additional notes: ')
         if new_status not in valid_status_options:
             print('Invalid status')
             continue
         if appList.changeAppStatus(company_name, new_status):
+            appList.addNotes(company_name, new_status)
             print('Status changed')
         else:
             print('Company not found')
-    elif user_input == 4:
+    elif user_input == '4':
+        company_name = input('Company name: ')
+        status = input('Initial status: ')
+        interest = int(input('Interest: '))
+        url = input('URL: ')
+        category = input('Category: ')
+        notes = input('Notes: ')
+
+        newApp = JobApplication(company_name, status, interest, url, category, notes)
+        appList.add(newApp)
+        print('application added')
+    elif user_input == '5':
         appList.save('apps.txt')
+        print('Saved')
+    elif user_input == '6':
         break
+    elif user_input == '7':
+        appList.printStats()
     else:
         print('invalid input')
