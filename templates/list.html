@@ -1,11 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Welcome to ApPy list</h1>
+<h1>Welcome to ApPy list <i class="fa fa-plus-circle" data-toggle="modal" data-target="#create-app-modal"></i></h1>
 
 {% for app in apps %}
 <div>
     <h3>{{ app.position }} at {{ app.company }}</h3>
 </div>
 {% endfor %}
+
+<!-- Create Application modal -->
+<div class="modal fade" id="create-app-modal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">New Application</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="create-application-form" action="" method="post">
+                    <input type="text" id="company" name="company" placeholder="Company">
+                    <input type="text" id="position" name="position" placeholder="Position">
+                    <input type="text" id="status" name="status" placeholder="Current Status">
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="create-app" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
