@@ -19,10 +19,11 @@
             </div>
 
             <div class="modal-body">
-                <form id="create-application-form" action="" method="post">
+                <form id="create-application-form" action="" method="post">{% csrf_token %}
                     <input type="text" id="company" name="company" placeholder="Company">
                     <input type="text" id="position" name="position" placeholder="Position">
                     <input type="text" id="status" name="status" placeholder="Current Status">
+                    <input type="text" id="link" name="link" placeholder="Link (optional)">
                 </form>
             </div>
 
@@ -33,4 +34,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#create-app').click(function () {
+            var app_data = {
+                'company': $('input[name="company"]').val(),
+                'position': $('input[name="position"]').val(),
+                'status': $('input[name="status"]').val(),
+                'link': $('input[name="link"]').val(),
+            };
+
+            $.post('/applications/create', app_data)
+            .success(function(data, status, headers, config) {
+                console.log('Application saved');
+            })
+            .error(function(data, status, headers, config) {
+                console.log('An error occured');
+            });
+        });
+    });
+</script>
 {% endblock %}
