@@ -5,7 +5,7 @@
 
 {% for app in apps %}
 <div>
-    <h3>{{ app.position }} at {{ app.company }}</h3>
+    <a href="{{ app.link }}"><h3>{{ app.position }} at {{ app.company }}</h3></a>
 </div>
 {% endfor %}
 
@@ -47,7 +47,7 @@
 
             $.post('/applications/create', app_data)
             .success(function(data, status, headers, config) {
-                console.log('Application saved');
+                location.reload();
             })
             .error(function(data, status, headers, config) {
                 console.log('An error occured');
