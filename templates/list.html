@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to ApPy list</h1>
+
+{% for app in apps %}
+<div>
+    <h3>{{ app.position }} at {{ app.company }}</h3>
+</div>
+{% endfor %}
+{% endblock %}
