@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>All Positions</h1>
+<a href="/logout">Logout</a>
+
+{% for position in positions %}
+    <h3>{{ positions.job_title }} at {{ position.company }}</h3>
+{% endfor %}
+
+{% endblock %}

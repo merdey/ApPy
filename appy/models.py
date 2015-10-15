@@ -8,7 +8,7 @@ class Tag(models.Model):
 
 class Position(models.Model):
     company = models.TextField()
-    position = models.TextField()
+    job_title = models.TextField()
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
 
