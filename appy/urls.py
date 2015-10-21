@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^logout$', 'appy.views.logout_view', name='logout'),
 
     url(r'^positions$', 'appy.views.positions', name='positions'),
+    url(r'^applications$', 'appy.views.applications', name='applications'),
 
     url(r'^admin/', include(admin.site.urls)),
 ]

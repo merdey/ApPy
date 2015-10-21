@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from django.shortcuts import redirect, render
 
-from appy.models import Position
+from appy.models import Application, Position
 
 
 def home(request):
@@ -54,4 +54,14 @@ def positions(request):
 
     return render(request, 'positions.html', {
         'positions': positions,
+    })
+
+
+@login_required
+def applications(request):
+    user = request.user
+    applications = Application.objects.filter(user=user)
+
+    return render(request, 'applications.html', {
+        'applications': applications,
     })
