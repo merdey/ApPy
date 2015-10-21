@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>All Positions</h1>
-<a href="/logout">Logout</a>
+{% block header %}
+    <h1>All Positions</h1>
+{% endblock %}
 
-{% for position in positions %}
-    <h3>{{ positions.job_title }} at {{ position.company }}</h3>
-{% endfor %}
+
+{% block content %}
+    {% for position in positions %}
+        <div class="position">
+            <h3>{{ position.job_title }} at {{ position.company }}</h3>
+            {% for tag in position.tags.all %}
+                <span class="btn btn-sm btn-info">{{ tag.description }}</span>
+            {% endfor %}
+            <button id="{{ position.id }}" class="apply-button">Apply</button>
+        </div>
+    {% endfor %}
 
 {% endblock %}
