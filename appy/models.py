@@ -5,12 +5,18 @@ from django.contrib.auth.models import User
 class Tag(models.Model):
     description = models.TextField()
 
+    def __unicode__(self):
+        return self.description
+
 
 class Position(models.Model):
     company = models.TextField()
     job_title = models.TextField()
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
+
+    def __unicode__(self):
+        return u'%s at %s' % (self.job_title, self.company)
 
 
 class Application(models.Model):
