@@ -8,7 +8,7 @@
 {% block content %}
     {% for position in positions %}
         <div class="position">
-            <h3>{{ position.job_title }} at {{ position.company }}</h3>
+            <h3>{{ position }}</h3>
             {% for tag in position.tags.all %}
                 <span class="btn btn-sm btn-info">{{ tag.description }}</span>
             {% endfor %}

@@ -6,4 +6,28 @@
 
 {% block content %}
 
+    {% if applications %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Status</th>
+                    <th>Application Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>{{ app.position }}</td>
+                    <td>{{ app.status }}</td>
+                    <td>{{ app.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div>No applications created yet</div>
+    {% endif %}
+
+
 {% endblock %}
