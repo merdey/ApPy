@@ -2,9 +2,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
 from appy.models import Application, Position
+from appy.utils import apply_for_position
 
 
 def home(request):
@@ -65,3 +67,14 @@ def applications(request):
     return render(request, 'applications.html', {
         'applications': applications,
     })
+
+
+
+def apply(request):
+    user = request.user
+    position_id = request.POST.get('position_id')
+    position = Position.objects.get(id=position_id)
+
+    apply_for_position(position, user)
+    return JsonResponse({'success': True})
+

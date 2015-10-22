@@ -12,8 +12,20 @@
             {% for tag in position.tags.all %}
                 <span class="btn btn-sm btn-info">{{ tag.description }}</span>
             {% endfor %}
-            <button id="{{ position.id }}" class="apply-button">Apply</button>
+            <button class="btn" id="{{ position.id }}" onclick="apply({{ position.id }})" class="apply-button">Apply</button>
         </div>
     {% endfor %}
+
+    <script>
+        function apply(id) {
+            console.log(id);
+            data = {
+                position_id: id,
+            }
+            $.post('/apply', data, function() {
+                $('button#' + id).addClass('btn-success');
+            });
+        };
+    </script>
 
 {% endblock %}

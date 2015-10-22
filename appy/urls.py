@@ -11,5 +11,7 @@ urlpatterns = [
     url(r'^positions$', 'appy.views.positions', name='positions'),
     url(r'^applications$', 'appy.views.applications', name='applications'),
 
+    url(r'^apply$', 'appy.views.apply'),
+
     url(r'^admin/', include(admin.site.urls)),
 ]
