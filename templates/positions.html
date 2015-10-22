@@ -12,7 +12,11 @@
             {% for tag in position.tags.all %}
                 <span class="btn btn-sm btn-info">{{ tag.description }}</span>
             {% endfor %}
-            <button class="btn" id="{{ position.id }}" onclick="apply({{ position.id }})" class="apply-button">Apply</button>
+            {% if not position.already_applied %}
+                <button class="btn" id="{{ position.id }}" onclick="apply({{ position.id }})" class="apply-button">Apply</button>
+            {% else %}
+                <button class="btn btn-success" disabled>Applied</button>
+            {% endif %}
         </div>
     {% endfor %}
 
@@ -23,7 +27,7 @@
                 position_id: id,
             }
             $.post('/apply', data, function() {
-                $('button#' + id).addClass('btn-success');
+                $('button#' + id).text('Applied').addClass('btn-success').attr(“disabled”, true);;
             });
         };
     </script>

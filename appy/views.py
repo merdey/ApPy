@@ -53,6 +53,10 @@ def logout_view(request):
 @login_required
 def positions(request):
     positions = Position.objects.all()
+    applied_to = set([app.position for app in Application.objects.filter(user=request.user)])
+
+    for position in positions:
+        position.already_applied = position in applied_to
 
     return render(request, 'positions.html', {
         'positions': positions,
