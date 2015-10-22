@@ -7,7 +7,7 @@
 {% block content %}
 
     {% if applications %}
-        <table>
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Position</th>
@@ -19,7 +19,7 @@
                 {% for app in applications %}
                 <tr>
                     <td>{{ app.position }}</td>
-                    <td>{{ app.status }}</td>
+                    <td>{{ app.get_status_display }}</td>
                     <td>{{ app.created_at }}</td>
                 </tr>
                 {% endfor %}
