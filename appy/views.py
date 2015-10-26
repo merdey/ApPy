@@ -94,3 +94,11 @@ def update_status(request):
     app.save()
     return JsonResponse({'success': True})
 
+
+@login_required
+def delete_app(request):
+    app_id = request.POST.get('app_id')
+    app = Application.objects.get(user=request.user, id=app_id)
+
+    app.delete()
+    return JsonResponse({'success': True})

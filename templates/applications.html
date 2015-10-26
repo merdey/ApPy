@@ -29,6 +29,7 @@
                     </td>
                     <td>
                         <button class="btn btn-sm" onclick="updateStatus({{ app.id }})">Update Status</button>
+                        <button onclick="deleteApplication({{ app.id }})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -41,13 +42,21 @@
 
     <script>
         function updateStatus(id) {
-            console.log('hello');
             new_status = $('select#status-' + id).val();
             data = {
                 app_id: id,
                 new_status: new_status,
-            }
+            };
             $.post('/update-status', data);
+        };
+
+        function deleteApplication(id) {
+            data = {
+                app_id: id,
+            };
+            $.post('/delete-app', data, function() {
+                location.reload();
+            });
         };
     </script>
 
