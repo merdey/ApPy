@@ -65,15 +65,14 @@ def positions(request):
 
 @login_required
 def applications(request):
-    user = request.user
-    applications = Application.objects.filter(user=user)
+    applications = Application.objects.filter(user=request.user)
 
     return render(request, 'applications.html', {
         'applications': applications,
     })
 
 
-
+@login_required
 def apply(request):
     user = request.user
     position_id = request.POST.get('position_id')
