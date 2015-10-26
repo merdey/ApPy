@@ -19,8 +19,17 @@
                 {% for app in applications %}
                 <tr>
                     <td>{{ app.position }}</td>
-                    <td>{{ app.get_status_display }}</td>
                     <td>{{ app.created_at }}</td>
+                    <td>
+                        <select id="status-{{ app.id }}">
+                            {% for status in status_choices %}
+                            <option value="{{ status.0 }}" {% if status.0 == app.status %}selected{% endif %}>{{ status.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm" onclick="updateStatus({{ app.id }})">Update Status</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -28,6 +37,19 @@
     {% else %}
         <div>No applications created yet</div>
     {% endif %}
+
+
+    <script>
+        function updateStatus(id) {
+            console.log('hello');
+            new_status = $('select#status-' + id).val();
+            data = {
+                app_id: id,
+                new_status: new_status,
+            }
+            $.post('/update-status', data);
+        };
+    </script>
 
 
 {% endblock %}

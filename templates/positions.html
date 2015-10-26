@@ -22,12 +22,11 @@
 
     <script>
         function apply(id) {
-            console.log(id);
             data = {
                 position_id: id,
             }
             $.post('/apply', data, function() {
-                $('button#' + id).text('Applied').addClass('btn-success').attr(“disabled”, true);;
+                $('button#' + id).text('Applied').addClass('btn-success').attr(“disabled”, true);
             });
         };
     </script>

@@ -66,9 +66,11 @@ def positions(request):
 @login_required
 def applications(request):
     applications = Application.objects.filter(user=request.user)
+    status_choices = Application.STATUS_CHOICES
 
     return render(request, 'applications.html', {
         'applications': applications,
+        'status_choices': status_choices,
     })
 
 
@@ -79,5 +81,16 @@ def apply(request):
     position = Position.objects.get(id=position_id)
 
     apply_for_position(position, user)
+    return JsonResponse({'success': True})
+
+
+@login_required
+def update_status(request):
+    app_id = request.POST.get('app_id')
+    new_status = request.POST.get('new_status')
+    app = Application.objects.get(user=request.user, id=app_id)
+
+    app.status = new_status
+    app.save()
     return JsonResponse({'success': True})
 
