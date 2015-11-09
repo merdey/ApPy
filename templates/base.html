@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
 <head lang="en">
     <meta charset="UTF-8">
@@ -6,6 +7,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <script src="//code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -18,17 +20,23 @@
 </head>
 <body>
 
-{% block header %}
-{% endblock %}
+    <div id="header">
+    {% block header %}
+    {% endblock %}
+    </div>
 
-{% block navigation %}
-    <a href="/logout">Logout</a>
-    <a href="/positions">Positions</a>
-    <a href="/applications">My Applications</a>
-{% endblock %}
+    <div id="nav">
+    {% block navigation %}
+        <a href="/logout">Logout</a>
+        <a href="/positions">Positions</a>
+        <a href="/applications">My Applications</a>
+    {% endblock %}
+    </div>
 
-{% block content %}
-{% endblock %}
+    <div id="content">
+    {% block content %}
+    {% endblock %}
+    </div>
 
 </body>
 </html>
