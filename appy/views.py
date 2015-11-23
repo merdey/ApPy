@@ -5,7 +5,7 @@ from django.core.context_processors import csrf
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
-from appy.models import Application, Position
+from appy.models import Application, Position, Tag
 from appy.utils import apply_for_position
 
 
@@ -52,7 +52,11 @@ def logout_view(request):
 
 @login_required
 def positions(request):
-    positions = Position.objects.all()
+    if request.method == 'POST':
+        positions = search_positions(request)
+    else:
+        positions = Position.objects.all()
+
     applied_to = set([app.position for app in Application.objects.filter(user=request.user)])
 
     for position in positions:
@@ -61,6 +65,16 @@ def positions(request):
     return render(request, 'positions.html', {
         'positions': positions,
     })
+
+
+def search_positions(request):
+    tag_search = request.POST.get('tag_search', None)
+
+    if tag_search:
+        tags = Tag.objects.filter(description__icontains=tag_search)
+        positions = tags.position_set.all()
+
+    return positions or []
 
 
 @login_required
