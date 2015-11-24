@@ -69,12 +69,14 @@ def positions(request):
 
 def search_positions(request):
     tag_search = request.POST.get('tag_search', None)
+    positions = []
 
     if tag_search:
         tags = Tag.objects.filter(description__icontains=tag_search)
-        positions = tags.position_set.all()
+        for tag in tags:
+            positions.extend(tag.position_set.all())
 
-    return positions or []
+    return positions
 
 
 @login_required
