@@ -68,13 +68,22 @@ def positions(request):
 
 
 def search_positions(request):
+    company = request.POST.get('company', None)
+    title = request.POST.get('title', None)
     tag_search = request.POST.get('tag_search', None)
-    positions = []
 
+    positions = Position.objects.all()
+    if company:
+        positions = positions.filter(company__icontains=company)
+    if title:
+        positions = positions.filter(job_title__icontains=title)
     if tag_search:
+        p_ids = set()
         tags = Tag.objects.filter(description__icontains=tag_search)
         for tag in tags:
-            positions.extend(tag.position_set.all())
+            for p in tag.position_set.all():
+                p_ids.add(p.id)
+        positions = positions.filter(id__in=p_ids)
 
     return positions
 
