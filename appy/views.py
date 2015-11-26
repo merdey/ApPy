@@ -52,8 +52,13 @@ def logout_view(request):
 
 @login_required
 def positions(request):
+    context = {}
     if request.method == 'POST':
-        positions = search_positions(request)
+        company = request.POST.get('company', None)
+        job_title = request.POST.get('job_title', None)
+        tag_search = request.POST.get('tag_search', None)
+        context.update({'company': company, 'job_title': job_title, 'tag_search': tag_search})
+        positions = search_positions(company, job_title, tag_search)
     else:
         positions = Position.objects.all()
 
@@ -61,22 +66,17 @@ def positions(request):
 
     for position in positions:
         position.already_applied = position in applied_to
+    context.update({'positions': positions})
 
-    return render(request, 'positions.html', {
-        'positions': positions,
-    })
+    return render(request, 'positions.html', context)
 
 
-def search_positions(request):
-    company = request.POST.get('company', None)
-    title = request.POST.get('title', None)
-    tag_search = request.POST.get('tag_search', None)
-
+def search_positions(company, job_title, tag_search):
     positions = Position.objects.all()
     if company:
         positions = positions.filter(company__icontains=company)
-    if title:
-        positions = positions.filter(job_title__icontains=title)
+    if job_title:
+        positions = positions.filter(job_title__icontains=job_title)
     if tag_search:
         p_ids = set()
         tags = Tag.objects.filter(description__icontains=tag_search)

@@ -10,17 +10,17 @@
     <form class="form-inline" method="post">{% csrf_token %}
         <div class="form-group">
             <label for="tags">Company</label>
-            <input type="text" class="form-control" id="company" name="company" placeholder="Google">
+            <input type="text" class="form-control" id="company" name="company" placeholder="Google" {% if company %}value="{{ company }}"{% endif %}>
         </div>
 
         <div class="form-group">
             <label for="tags">Title</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Software Engineer">
+            <input type="text" class="form-control" id="title" name="job_title" placeholder="Software Engineer" {% if job_title %}value="{{ job_title }}"{% endif %}>
         </div>
 
         <div class="form-group">
             <label for="tags">Tags</label>
-            <input type="text" class="form-control" id="tags" name="tag_search" placeholder="Web Dev, Python">
+            <input type="text" class="form-control" id="tags" name="tag_search" placeholder="Web Dev, Python" {% if tag_search %}value="{{ tag_search }}"{% endif %}>
         </div>
 
         <button type="submit" class="btn btn-default btn-primary">Search</button>
