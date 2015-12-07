@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -66,8 +68,10 @@ def positions(request):
 
     for position in positions:
         position.already_applied = position in applied_to
-    context.update({'positions': positions})
 
+    positions = sort_positions(positions, request.user)
+
+    context.update({'positions': positions})
     return render(request, 'positions.html', context)
 
 
@@ -87,6 +91,22 @@ def search_positions(company, job_title, tag_search):
 
     return positions
 
+
+def sort_positions(positions, user):
+    user_tag_counts = defaultdict(int)
+    for app in Application.objects.filter(user=user).prefetch_related('position__tags'):
+        tags = app.position.tags.all()
+        for t in tags:
+            user_tag_counts[t.description] += 1
+
+    return sorted(positions, key=lambda p: recommendation_score(p, user_tag_counts), reverse=True)
+
+def recommendation_score(position, user_tag_counts):
+    score = 0
+    tags = position.tags.all()
+    for t in tags:
+        score += user_tag_counts[t.description]
+    return score
 
 @login_required
 def applications(request):
