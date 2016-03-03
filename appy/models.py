@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Tag(models.Model):
     description = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description
 
 
@@ -15,8 +15,8 @@ class Position(models.Model):
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
 
-    def __unicode__(self):
-        return u'%s at %s' % (self.job_title, self.company)
+    def __str__(self):
+        return '%s at %s' % (self.job_title, self.company)
 
 
 class Application(models.Model):
