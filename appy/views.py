@@ -117,6 +117,9 @@ def search_positions(company, job_title, tag_search):
 
 
 def sort_positions(positions, user):
+    if Application.objects.filter(user=user).count() < 10:
+        return positions.order_by('-created_at')
+
     user_tag_counts = defaultdict(int)
     for app in Application.objects.filter(user=user).prefetch_related('position__tags'):
         tags = app.position.tags.all()
