@@ -22,7 +22,10 @@ def signup(request):
     password = request.POST.get('password')
 
     if username and password:
-        user = User.objects.create_user(username=username, password=password)
+        User.objects.create_user(username=username, password=password)
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        return redirect('positions')
     else:
         return render(request, 'home.html', {'errors': 'Unable to create user'})
 
