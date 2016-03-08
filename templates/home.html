@@ -29,18 +29,18 @@
         <div class="row">
             <div class="tab-content">
                 <div class="tab-pane active" id="login">
-                    <form class="login-form" method="post" action="login">
+                    <form class="login-form" method="post" action="/login">{% csrf_token %}
                         <input type="text" name="username" placeholder="username">
                         <input type="password" name="password" placeholder="password">
-                        <a id="login-btn" class="btn btn-default">Log In</a>
+                        <button type="submit" id="login-btn" class="btn btn-default">Log In</button>
                     </form>
                 </div>
 
                 <div class="tab-pane" id="signup">
-                    <form class="login-form" method="post" action="signup">
+                    <form class="login-form" method="post" action="/signup">{% csrf_token %}
                         <input type="text" name="username" placeholder="username">
                         <input type="password" name="password" placeholder="password">
-                        <a id="signup-btn" class="btn btn-primary">Sign Up</a>
+                        <button type="submit" id="signup-btn" class="btn btn-primary">Sign Up</button>
                     </form>
                 </div>
             </div>

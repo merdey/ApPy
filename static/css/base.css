@@ -4,13 +4,13 @@ body {
 }
 
 .header {
-    padding: 50px;
+    padding: 25px;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 5em;
 }
 
 .login-form {
-    padding: 20px;
+    padding: 25px;
     text-align: center;
 }

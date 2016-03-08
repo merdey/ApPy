@@ -20,22 +20,22 @@
 </head>
 <body>
 
-    <div id="header">
-    {% block header %}
-    {% endblock %}
-    </div>
+    <div class="container">
+        <ul class="nav nav-pills" style="float:right">
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/positions">Positions</a></li>
+            <li><a href="/applications">My Applications</a></li>
+        </ul>
 
-    <div id="nav">
-    {% block navigation %}
-        <a href="/logout">Logout</a>
-        <a href="/positions">Positions</a>
-        <a href="/applications">My Applications</a>
-    {% endblock %}
-    </div>
+        <div class="header">
+        {% block header %}
+        {% endblock %}
+        </div>
 
-    <div id="content">
-    {% block content %}
-    {% endblock %}
+        <div id="content">
+        {% block content %}
+        {% endblock %}
+        </div>
     </div>
 
 </body>
