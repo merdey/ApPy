@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from appy.models import Application, Position, Tag
 from appy.utils import apply_for_position
@@ -15,36 +16,29 @@ def home(request):
     return render(request, 'home.html')
 
 
+@require_POST
 def signup(request):
-    context = {}
-    context.update(csrf(request))
-    if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
 
+    if username and password:
         user = User.objects.create_user(username=username, password=password)
-
-        return render(request, 'home.html')
     else:
-        return render(request, 'login.html', context)
+        return render(request, 'home.html', {'errors': 'Unable to create user'})
 
 
+@require_POST
 def login_view(request):
-    context = {}
-    context.update(csrf(request))
-    if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
 
+    if username and password:
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('positions')
-        else:
-            context['errors'] = 'Username or password was incorrect'
-            return render(request, 'login.html', context)
-    else:
-        return render(request, 'login.html', context)
+
+    return render(request, 'home.html', {'errors': 'Unable to log in'})
 
 
 def logout_view(request):

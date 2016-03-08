@@ -2,3 +2,15 @@ body {
     background-color: rgb(170, 240, 255);
     color: rgb(0, 0, 0);
 }
+
+.header {
+    padding: 50px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 5em;
+}
+
+.login-form {
+    padding: 20px;
+    text-align: center;
+}
