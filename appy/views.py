@@ -68,6 +68,36 @@ def positions(request):
     context.update({'positions': positions})
     return render(request, 'positions.html', context)
 
+@login_required
+def create_position(request):
+    if request.method == 'POST':
+        company = request.POST.get('company')
+        job_title = request.POST.get('job_title')
+        description = request.POST.get('description')
+
+        tags = []
+        tag_list = request.POST.get('tags')
+        for tag_name in tag_list.split(','):
+            tag_name = tag_name.strip()
+            try:
+                t = Tag.objects.get(description=tag_name)
+            except Tag.DoesNotExist:
+                t = Tag.objects.create(description=tag_name)
+            tags.append(t)
+
+        position = Position.objects.create(
+            company=company,
+            job_title=job_title,
+            description=description
+        )
+
+        for t in tags:
+            position.tags.add(t)
+
+        return render(request, 'create_position.html')
+    else:
+        return render(request, 'create_position.html')
+
 
 def search_positions(company, job_title, tag_search):
     positions = Position.objects.all()

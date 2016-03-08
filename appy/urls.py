@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^positions$', 'appy.views.positions', name='positions'),
     url(r'^applications$', 'appy.views.applications', name='applications'),
 
+    url(r'^create-position', 'appy.views.create_position'),
+
     url(r'^apply$', 'appy.views.apply'),
     url(r'^update-status$', 'appy.views.update_status'),
     url(r'^delete-app$', 'appy.views.delete_app'),
