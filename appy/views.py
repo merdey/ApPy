@@ -50,9 +50,9 @@ def logout_view(request):
 def positions(request):
     context = {}
     if request.method == 'POST':
-        company = request.POST.get('company', None)
-        job_title = request.POST.get('job_title', None)
-        tag_search = request.POST.get('tag_search', None)
+        company = request.POST.get('company')
+        job_title = request.POST.get('job_title')
+        tag_search = request.POST.get('tag_search')
         context.update({'company': company, 'job_title': job_title, 'tag_search': tag_search})
         positions = search_positions(company, job_title, tag_search)
     else:
