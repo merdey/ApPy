@@ -15,6 +15,8 @@ class Position(models.Model):
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return '%s at %s' % (self.job_title, self.company)
 
