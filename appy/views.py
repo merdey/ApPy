@@ -1,14 +1,19 @@
 from collections import defaultdict
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
 from appy.models import Application, Position, Tag
 from appy.utils import apply_for_position
+from appy.utils import search_positions
+from appy.utils import sort_positions
 
 
 def home(request):
@@ -61,7 +66,6 @@ def positions(request):
         positions = Position.objects.all()
 
     applied_to = set([app.position for app in Application.objects.filter(user=request.user)])
-
     for position in positions:
         position.already_applied = position in applied_to
 
@@ -69,6 +73,7 @@ def positions(request):
 
     context.update({'positions': positions})
     return render(request, 'positions.html', context)
+
 
 @login_required
 def create_position(request):
@@ -100,42 +105,6 @@ def create_position(request):
     else:
         return render(request, 'create_position.html')
 
-
-def search_positions(company, job_title, tag_search):
-    positions = Position.objects.all()
-    if company:
-        positions = positions.filter(company__icontains=company)
-    if job_title:
-        positions = positions.filter(job_title__icontains=job_title)
-    if tag_search:
-        p_ids = set()
-        tags = Tag.objects.filter(description__icontains=tag_search)
-        for tag in tags:
-            for p in tag.position_set.all():
-                p_ids.add(p.id)
-        positions = positions.filter(id__in=p_ids)
-
-    return positions
-
-
-def sort_positions(positions, user):
-    if Application.objects.filter(user=user).count() < 10:
-        return positions.order_by('-created_at')
-
-    user_tag_counts = defaultdict(int)
-    for app in Application.objects.filter(user=user).prefetch_related('position__tags'):
-        tags = app.position.tags.all()
-        for t in tags:
-            user_tag_counts[t.description] += 1
-
-    return sorted(positions, key=lambda p: recommendation_score(p, user_tag_counts), reverse=True)
-
-def recommendation_score(position, user_tag_counts):
-    score = 0
-    tags = position.tags.all()
-    for t in tags:
-        score += user_tag_counts[t.description]
-    return score
 
 @login_required
 def applications(request):
