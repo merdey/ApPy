@@ -13,6 +13,7 @@
                     <th>Position</th>
                     <th>Status</th>
                     <th>Application Date</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,41 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <hr>
+
+        <form class="form-inline" action="/create-reminder">
+            <div class="form-group">
+                <label for="reminder-status">If status is: </label>
+                <select class="form-control" id="reminder-status" name="reminder-status">
+                    {% for status in status_choices %}
+                    <option value="{{ status.0 }}">{{ status.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reminder-duration"> for longer than: </label>
+                <input type="text" class="form-control" id="reminder-duration" placeholder="3 days, 1 week, ...">
+            </div>
+
+            <div class="form-group">
+                <label for="reminder-duration"> Remind me via: </label>
+                <div class="radio">
+                    <label><input type="radio" name="reminder-method" id="reminder-method-email" value="email" checked>Email</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="reminder-method" id="reminder-method-phone" value="phone">Phone</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reminder-duration"> at </label>
+                <input type="text" class="form-control" id="reminder-contact-info" placeholder="202-555-1177">
+            </div>
+
+            <button type="submit" class="btn btn-default">Create Reminder</button>
+        </form>
     {% else %}
         <div>You haven't applied to any positions yet. <a href="{% url 'positions' %}">Apply here</a></div>
     {% endif %}
