@@ -10,7 +10,10 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
-from appy.models import Application, Position, Tag
+from appy.models import Application
+from appy.models import Position
+from appy.models import Reminder
+from appy.models import Tag
 from appy.utils import apply_for_position
 from appy.utils import search_positions
 from appy.utils import sort_positions
@@ -107,13 +110,35 @@ def create_position(request):
 
 
 @login_required
+@require_POST
+def create_reminder(request):
+    status = request.POST['reminder-status']
+    duration = request.POST['reminder-duration']
+    contact_method = request.POST['reminder-method']
+    contact_info = request.POST['reminder-contact-info']
+
+    if Reminder.is_valid_duration(duration):
+        Reminder.objects.create(
+            user=request.user,
+            status=status,
+            duration=duration,
+            contact_method=contact_method,
+            contact_info=contact_info,
+        )
+
+    return applications(request)
+
+
+@login_required
 def applications(request):
     applications = Application.objects.filter(user=request.user)
     status_choices = Application.STATUS_CHOICES
+    reminders = Reminder.objects.filter(user=request.user)
 
     return render(request, 'applications.html', {
         'applications': applications,
         'status_choices': status_choices,
+        'reminders': reminders,
     })
 
 

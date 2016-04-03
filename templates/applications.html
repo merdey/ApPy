@@ -39,7 +39,31 @@
 
         <hr>
 
-        <form class="form-inline" action="/create-reminder">
+        {% if reminders %}
+            <table class="table table-hover">
+                <h3>Reminders</h3>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Duration</th>
+                        <th>Contact Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rem in reminders %}
+                    <tr>
+                        <td>{{ rem.get_status_display }}</td>
+                        <td>{{ rem.duration }}</td>
+                        <td>{{ rem.contact_info }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        <hr>
+
+        <form class="form-inline" action="/create-reminder" method="post">{% csrf_token %}
             <div class="form-group">
                 <label for="reminder-status">If status is: </label>
                 <select class="form-control" id="reminder-status" name="reminder-status">
@@ -51,11 +75,11 @@
 
             <div class="form-group">
                 <label for="reminder-duration"> for longer than: </label>
-                <input type="text" class="form-control" id="reminder-duration" placeholder="3 days, 1 week, ...">
+                <input type="text" class="form-control" name="reminder-duration" id="reminder-duration" placeholder="3 days, 1 week, ...">
             </div>
 
             <div class="form-group">
-                <label for="reminder-duration"> Remind me via: </label>
+                <label> Remind me via: </label>
                 <div class="radio">
                     <label><input type="radio" name="reminder-method" id="reminder-method-email" value="email" checked>Email</label>
                 </div>
@@ -65,11 +89,11 @@
             </div>
 
             <div class="form-group">
-                <label for="reminder-duration"> at </label>
-                <input type="text" class="form-control" id="reminder-contact-info" placeholder="202-555-1177">
+                <label for="reminder-contact-info"> at </label>
+                <input type="text" class="form-control" name="reminder-contact-info" id="reminder-contact-info" placeholder="202-555-1177">
             </div>
 
-            <button type="submit" class="btn btn-default">Create Reminder</button>
+            <button type="submit" class="btn btn-default">Create New Reminder</button>
         </form>
     {% else %}
         <div>You haven't applied to any positions yet. <a href="{% url 'positions' %}">Apply here</a></div>

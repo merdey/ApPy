@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^applications$', 'appy.views.applications', name='applications'),
 
     url(r'^create-position', 'appy.views.create_position'),
+    url(r'^create-reminder', 'appy.views.create_reminder'),
 
     url(r'^apply$', 'appy.views.apply'),
     url(r'^update-status$', 'appy.views.update_status'),
