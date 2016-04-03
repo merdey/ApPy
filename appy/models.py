@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -55,3 +57,38 @@ class Reminder(models.Model):
     )
     contact_method = models.CharField(max_length=2, choices=CONTACT_METHOD_CHOICES)
     contact_info = models.CharField(max_length=64)
+
+    @classmethod
+    def is_valid_duration(cls, duration):
+        try:
+            cls.duration_to_timedelta(duration)
+            return True
+        except Exception:
+            return False
+
+    @classmethod
+    def duration_to_timedelta(cls, duration):
+        from_end = None
+        if 'day' in duration:
+            from_end = 4
+            unit = 'day'
+        if 'days' in duration:
+            from_end = 5
+            unit = 'day'
+        if 'week' in duration:
+            from_end = 5
+            unit = 'week'
+        if 'weeks' in duration:
+            from_end = 6
+            unit = 'week'
+
+        if from_end:
+            num_units = int(duration[:-from_end])
+        else:
+            raise NotImplemented
+
+        if unit == 'day':
+            return datetime.timedelta(days=num_units)
+        elif unit == 'week':
+            num_units *= 7
+            return datetime.timedelta(days=num_units)
