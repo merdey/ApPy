@@ -39,3 +39,19 @@ class Application(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Reminder(models.Model):
+    user = models.ForeignKey(User)
+
+    status = models.CharField(max_length=3, choices=Application.STATUS_CHOICES)
+    duration = models.CharField(max_length=64)
+
+    EMAIL = 'EM'
+    PHONE = 'PH'
+    CONTACT_METHOD_CHOICES = (
+        (EMAIL, 'Email'),
+        (PHONE, 'Phone'),
+    )
+    contact_method = models.CharField(max_length=2, choices=CONTACT_METHOD_CHOICES)
+    contact_info = models.CharField(max_length=64)
