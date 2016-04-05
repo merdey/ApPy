@@ -19,8 +19,4 @@ class Command(BaseCommand):
             applications = Application.objects.filter(user=rem.user, status=rem.status)
             for app in applications:
                 if app.updated_at < date_to_check:
-                    send_reminder(rem)
-
-
-def send_reminder(reminder):
-    pass
+                    rem.send(app)

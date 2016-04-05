@@ -1,7 +1,11 @@
 import datetime
 
-from django.db import models
+from twilio.rest import TwilioRestClient
+
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.db import models
 
 
 class Tag(models.Model):
@@ -57,6 +61,26 @@ class Reminder(models.Model):
     )
     contact_method = models.CharField(max_length=2, choices=CONTACT_METHOD_CHOICES)
     contact_info = models.CharField(max_length=64)
+
+    def send(self, application):
+        message = self._construct_message(application)
+        if self.contact_method == self.EMAIL:
+            send_mail('Application Reminder', message, 'appy.michaelerdey@gmail.com', [self.contact_info], fail_silently=False)
+        else:
+            client = TwilioRestClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            client.messages.create(
+                to=self.contact_info,
+                from_=settings.TWILIO_DEFAULT_PHONE,
+                body=message,
+            )
+
+    def _construct_message(self, application):
+        return 'Reminding you to follow up with the application for %s at %s because it has been %s for %s' % (
+            application.position.job_title,
+            application.position.company,
+            self.status,
+            self.duration,
+        )
 
     @classmethod
     def is_valid_duration(cls, duration):
