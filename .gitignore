@@ -1,0 +1,11 @@
+*.pyc
+
+appy/settings_secret.py
+*.sqlite3
+
+.idea
+
+Include
+Lib
+Scripts
+pip-selfcheck.json
