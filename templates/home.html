@@ -20,27 +20,28 @@
         </div>
 
         <div class="row">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#login" data-toggle="tab">Log In</a></li>
-                <li><a href="#signup" data-toggle="tab">Sign Up</a></li>
-            </ul>
-        </div>
-
-        <div class="row">
             <div class="tab-content">
                 <div class="tab-pane active" id="login">
                     <form class="login-form" method="post" action="/login">{% csrf_token %}
                         <input type="text" name="username" placeholder="username">
                         <input type="password" name="password" placeholder="password">
                         <button type="submit" id="login-btn" class="btn btn-default">Log In</button>
-                    </form>
-                </div>
 
-                <div class="tab-pane" id="signup">
+                        {% if login_error %}
+                        <div>{{ login_error }}</div>
+                        {% endif %}
+                    </form>
+
+                    <hr>
+
                     <form class="login-form" method="post" action="/signup">{% csrf_token %}
                         <input type="text" name="username" placeholder="username">
                         <input type="password" name="password" placeholder="password">
                         <button type="submit" id="signup-btn" class="btn btn-primary">Sign Up</button>
+
+                        {% if signup_error %}
+                        <div>{{ signup_error }}</div>
+                        {% endif %}
                     </form>
                 </div>
             </div>

@@ -29,12 +29,16 @@ def signup(request):
     password = request.POST.get('password')
 
     if username and password:
-        User.objects.create_user(username=username, password=password)
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        return redirect('positions')
+        try:
+            User.objects.get(username=username)
+            return render(request, 'home.html', {'signup_error': 'That username is already taken'})
+        except:
+            User.objects.create_user(username=username, password=password)
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('positions')
     else:
-        return render(request, 'home.html', {'errors': 'Unable to create user'})
+        return render(request, 'home.html', {'signup_error': 'Username and password are required'})
 
 
 @require_POST
@@ -42,13 +46,12 @@ def login_view(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
 
-    if username and password:
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('positions')
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('positions')
 
-    return render(request, 'home.html', {'errors': 'Unable to log in'})
+    return render(request, 'home.html', {'login_error': 'Incorrect username or password'})
 
 
 def logout_view(request):
